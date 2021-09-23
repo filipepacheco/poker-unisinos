@@ -1,20 +1,23 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component} from '@angular/core';
+import { Socket } from 'ngx-socket-io';
+import { map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
-
+@Injectable()
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, OnDestroy {
-  title = 'app';
+export class AppComponent {
+  constructor(private socket: Socket) {}
 
-  constructor() {
+  sendMessage(msg: string) {
+    this.socket.emit('message', msg);
   }
 
-  ngOnInit() {
+  getMessage() {
+    return this.socket.fromEvent('message').pipe(map((data) => data));
   }
 
-  ngOnDestroy() {
-  }
 }
